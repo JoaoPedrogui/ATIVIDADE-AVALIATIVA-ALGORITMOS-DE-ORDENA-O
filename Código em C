@@ -1,0 +1,82 @@
+
+#include <stdio.h>
+
+// Mostra as notas dos alunos
+void mostrarNotas(int notas[], int tamanho) {
+    for (int i = 0; i < tamanho; i++)
+        printf("%d ", notas[i]);
+    printf("\n");
+}
+
+// Bubble Sort: compara notas vizinhas e troca quando necessário
+void bubbleSort(int notas[], int tamanho) {
+    int temp;
+    for (int i = 0; i < tamanho - 1; i++) {
+        for (int j = 0; j < tamanho - 1 - i; j++) {
+            if (notas[j] > notas[j + 1]) {
+                temp = notas[j];
+                notas[j] = notas[j + 1];
+                notas[j + 1] = temp;
+            }
+        }
+    }
+}
+
+// Quick Sort: separa as notas menores e maiores que o pivô
+int particionar(int notas[], int inicio, int fim) {
+    int pivo = notas[fim];
+    int i = inicio - 1, temp;
+
+    for (int j = inicio; j < fim; j++) {
+        if (notas[j] <= pivo) {
+            i++;
+            temp = notas[i];
+            notas[i] = notas[j];
+            notas[j] = temp;
+        }
+    }
+
+    temp = notas[i + 1];
+    notas[i + 1] = notas[fim];
+    notas[fim] = temp;
+
+    return i + 1;
+}
+
+// Aplica o Quick Sort recursivamente nas duas partes
+void quickSort(int notas[], int inicio, int fim) {
+    if (inicio < fim) {
+        int p = particionar(notas, inicio, fim);
+        quickSort(notas, inicio, p - 1);
+        quickSort(notas, p + 1, fim);
+    }
+}
+
+int main() {
+    // Situação: organizar as notas de 10 alunos
+    int notas[] = {78, 45, 92, 60, 85, 30, 70, 55, 98, 66};
+    int tamanho = sizeof(notas) / sizeof(notas[0]);
+    int bubble[10], quick[10];
+
+    // Copia os mesmos dados para comparar os algoritmos
+    for (int i = 0; i < tamanho; i++) {
+        bubble[i] = notas[i];
+        quick[i] = notas[i];
+    }
+
+    printf("=== ORGANIZACAO DAS NOTAS ===\n");
+    printf("Notas originais: ");
+    mostrarNotas(notas, tamanho);
+
+    // Ordena as notas usando Bubble Sort
+    bubbleSort(bubble, tamanho);
+    printf("Bubble Sort:     ");
+    mostrarNotas(bubble, tamanho);
+
+    // Ordena as notas usando Quick Sort
+    quickSort(quick, 0, tamanho - 1);
+    printf("Quick Sort:      ");
+    mostrarNotas(quick, tamanho);
+
+    return 0;
+}
